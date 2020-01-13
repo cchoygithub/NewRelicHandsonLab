@@ -27,13 +27,13 @@ namespace StoreService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<ToDoContext>(options => options.UseSqlite("Data Source=ToDo.db"));
+            services.AddDbContext<ToDoContext>(options => options.UseSqlite(Configuration.GetConnectionString("ToDoContext")));
         }
 
         public void ConfigureProductionServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<ToDoContext>(options => options.UseNpgsql("Data Source=ToDo.db"));
+            services.AddDbContext<ToDoContext>(options => options.UseNpgsql(Configuration.GetConnectionString("ToDoContext")));
         }
 
 
