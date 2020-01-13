@@ -20,7 +20,8 @@ namespace StoreService.Controllers
         [HttpGet]
         public IEnumerable<ToDoTaskApiModel> List()
         {
-            return context.Tasks.AsNoTracking()
+
+            return context.Tasks.ToArray()
                 .Select(t => new ToDoTaskApiModel
                 {
                     ID = t.ID,
