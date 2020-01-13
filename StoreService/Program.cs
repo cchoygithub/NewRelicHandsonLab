@@ -7,19 +7,45 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 using StoreService.Models;
 
 namespace StoreService
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json");
 
-            CreateDbIfNotExists(host);
+            var configuration = builder.Build();
 
-            host.Run();
+            Log.Logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(configuration)
+                    .WriteTo.Console()
+                    .CreateLogger();
+
+            try
+            {
+                Log.Information("Starting web host");
+                var host = CreateHostBuilder(args).Build();
+
+                CreateDbIfNotExists(host);
+
+                host.Run();
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly");
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private static void CreateDbIfNotExists(IHost host)
@@ -32,11 +58,11 @@ namespace StoreService
                 {
                     var context = services.GetRequiredService<ToDoContext>();
                     DbInitializer.Initialize(context);
+                    Log.Information("Initial Database created.");
                 }
                 catch (Exception ex)
                 {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred creating the DB.");
+                    Log.Error(ex, "An error occurred creating the DB.");
                 }
             }
         }
@@ -46,6 +72,6 @@ namespace StoreService
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                }).UseSerilog();
     }
 }
