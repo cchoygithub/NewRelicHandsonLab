@@ -61,7 +61,9 @@ New Relic Handson教材
     systemctl restart newrelic-infra.service
     ```
 
-4. このリポジトリのclone
+４. [ドキュメント](https://docs.newrelic.co.jp/docs/agents/net-agent/installation/install-net-agent-linux) にしたがってください。 
+
+5. このリポジトリのclone
 
 ## アプリの起動とNew Relic APMの検証
 
