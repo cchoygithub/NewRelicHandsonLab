@@ -61,7 +61,7 @@ New Relic Handson教材
     systemctl restart newrelic-infra.service
     ```
 
-４. [ドキュメント](https://docs.newrelic.co.jp/docs/agents/net-agent/installation/install-net-agent-linux) にしたがってください。 
+4. New Relic .NET Core Agentのインストールをします。[ドキュメント](https://docs.newrelic.co.jp/docs/agents/net-agent/installation/install-net-agent-linux) にしたがってください。 
 
 5. このリポジトリのclone
 
