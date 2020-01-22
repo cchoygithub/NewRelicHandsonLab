@@ -61,9 +61,20 @@ New Relic Handson教材
     systemctl restart newrelic-infra.service
     ```
 
-4. New Relic .NET Core Agentのインストールをします。[ドキュメント](https://docs.newrelic.co.jp/docs/agents/net-agent/installation/install-net-agent-linux) にしたがってください。 
+4. New Relic .NET Core Agentのインストールをします。[ドキュメント](https://docs.newrelic.co.jp/docs/agents/net-agent/installation/install-net-agent-linux) にしたがってください。
+   
+   ```
+   echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | sudo tee /etc/apt/sources.list.d/newrelic.list
+   wget -O- https://download.newrelic.com/548C16BF.gpg | sudo apt-key add -
+   sudo apt-get update
+   sudo apt-get install newrelic-netcore20-agent
+   ```
 
 5. このリポジトリのclone
+
+   ```
+   git clone https://github.com/tanaka-takayoshi/NewRelicHandsonLab.git
+   ```
 
 ## アプリの起動とNew Relic APMの検証
 
@@ -82,13 +93,13 @@ New Relic Handson教材
     ```bash
     cd <リポジトリのパス>/Publish/StoreService
 
-    NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true NEW_RELIC_LICENSE_KEY=<ライセンスキー> NEW_RELIC_APP_NAME=StoreService-<PREFIX> $CORECLR_NEWRELIC_HOME/run.sh dotnet /home/clouduser/NewRelicHandsonLab/StoreService/bin/Release/netcoreapp3.1/StoreService.dll --urls "http://*:8080"
+    NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true NEW_RELIC_LICENSE_KEY=<ライセンスキー> NEW_RELIC_APP_NAME=StoreService-<PREFIX> $CORECLR_NEWRELIC_HOME/run.sh dotnet StoreService.dll --urls "http://*:8080"
     ```
 
     ```bash
     cd <リポジトリのパス>/Publish/WebPortal
 
-    NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true NEW_RELIC_LICENSE_KEY=<ライセンスキー> NEW_RELIC_APP_NAME=WebPortal-<PREFIX> STORE_SVC_URL=http://localhost:8080 $CORECLR_NEWRELIC_HOME/run.sh dotnet /home/clouduser/NewRelicHandsonLab/WebPortal/bin/Release/netcoreapp3.1/WebPortal.dll --urls "http://*:8081" 
+    NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true NEW_RELIC_LICENSE_KEY=<ライセンスキー> NEW_RELIC_APP_NAME=WebPortal-<PREFIX> STORE_SVC_URL=http://localhost:8080 $CORECLR_NEWRELIC_HOME/run.sh dotnet WebPortal.dll --urls "http://*:8081" 
     ```
 
 4. WebPortalのTasksページに何度かリクエストを発行してください。
